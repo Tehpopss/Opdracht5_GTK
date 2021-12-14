@@ -13,6 +13,18 @@ void button_clicked(GtkWidget *widget,gpointer data)
     }
 }
 
+void button_clicked2(GtkWidget *widget,gpointer data)
+{   
+    if(digitalRead(22) == LOW){
+        digitalWrite(22, HIGH);
+        g_print("GPIO22 = HIGH \n");
+    }
+    else{
+        digitalWrite(22,LOW);
+        g_print("GPIO22 = LOW \n");
+    }
+}
+
 void main (int argc, char *argv[])
 {
     wiringPiSetup();
@@ -22,7 +34,12 @@ void main (int argc, char *argv[])
     GtkWidget *win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     GtkWidget *btn = gtk_button_new_with_label ("Change State GPIO21");
     g_signal_connect(btn,"clicked",G_CALLBACK(button_clicked),NULL);
-    gtk_container_add (GTK_CONTAINER (win), btn);
+    GtkWidget *btn2 = gtk_button_new_with_label("Change State GPIO22");
+    g_signal_connect(btn2,"clicked",G_CALLBACK(button_clicked2),NULL);
+    GtkWidget *box = gtk_vbox_new (FALSE,10);
+    gtk_box_pack_start(GTK_BOX(box),btn, TRUE, TRUE,0);
+    gtk_box_pack_start(GTK_BOX(box),btn2, TRUE, TRUE,0);
+    gtk_container_add (GTK_CONTAINER(win),box);
     gtk_widget_show_all (win);
     gtk_main ();
 }
